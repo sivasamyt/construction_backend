@@ -13,20 +13,23 @@ class UserController extends Controller
 {
     public function signup(Request $request)
     {
-        $otp=random_int(100000,999999);
-        // dd("otp is - ".$otp);
         $username = $request->username;
         $email = $request->email;
         $password = $request->password;
-        try {
-            $user = User::create([
-                'name' => $username,
-                'email' => $email,
-                'password' => $password
-            ]);
-            return ['message' => 'success'];
-        } catch (\Throwable $th) {
-            return ['message' => 'failure'];
+        $existUser = User::where("email", $email)->first();
+        if (!$existUser) {
+            try {
+                $user = User::create([
+                    'name' => $username,
+                    'email' => $email,
+                    'password' => $password
+                ]);
+                return ['message' => 'success'];
+            } catch (\Throwable $th) {
+                return ['message' => 'failure'];
+            }
+        } else {
+            return ['message' => 'Already signed Up Please Login'];
         }
 
     }
@@ -43,7 +46,8 @@ class UserController extends Controller
         return response(['message' => 'Provided email or password is incorrect'], 401);
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $requestToken = $request->header('Authorization');
         $tokenId = Personal_access_token::where('token', $requestToken)->first();
         if ($tokenId) {
