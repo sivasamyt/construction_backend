@@ -13,6 +13,8 @@ class UserController extends Controller
 {
     public function signup(Request $request)
     {
+        $otp=random_int(100000,999999);
+        // dd("otp is - ".$otp);
         $username = $request->username;
         $email = $request->email;
         $password = $request->password;
