@@ -20,7 +20,7 @@ use App\Http\Controllers\MailController;
 //     return $request->user();
 // });
 Route::post('/login', [UserController::class, 'login']);
-Route::get('/otpMail', [MailController::class, 'otpMail']);
+Route::post('/otpMail', [MailController::class, 'otpMail']);
 Route::post('/signup', [UserController::class, 'signup']);
 Route::middleware('apiToken')->group(function () {
     Route::get('/logout', [UserController::class, 'logout']);
