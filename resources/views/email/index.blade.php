@@ -6,8 +6,8 @@
 </head>
 
 <body>
-    <h2>Your OTP is </h2>
-    {{-- <h3>{{ $data }}</h3> --}}
+    <h1> Welcome to Construction Website </h1>
+    <h3>Your OTP is <span style=" color: red">{{ $data }}</span></h3>
 </body>
 
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OtpTable;
 use Exception;
 use Illuminate\Http\Request;
 use Mail;
@@ -14,15 +15,18 @@ class MailController extends Controller
         // return $request->email;
         $emailId = $request->email;
         $otp = random_int(100000, 999999);
-        // $data = $otp;
         try {
             Mail::to($emailId)->send(new OtpMail($otp));
+            $otpEmail = OtpTable::where("mail", $emailId)->first();
+            if ($otpEmail) {
+                $data = OtpTable::where("id", $otpEmail->id)->update(["otp" => $otp]);
+            } else {
+                $data = OtpTable::create(['mail' => $emailId, 'otp' => $otp]);
+            }
             return response()->json(['message' => 'please check mail']);
         } catch (Exception $th) {
-            return response()->json(['message'=> 'Mail not send verify mail id please']);
+            return response()->json(['message' => 'Mail not send verify mail id please']);
         }
-
     }
-
 
 }

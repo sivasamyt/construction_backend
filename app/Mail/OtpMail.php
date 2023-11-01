@@ -22,25 +22,32 @@ class OtpMail extends Mailable
     $this->data = $data;
     }
 
+    public function build()
+    {
+        return $this
+            ->subject('Construction Otp Mail')
+            ->view('email.index')
+            ->with(['data' => $this->data]);
+    }
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Contruction Otp Mail',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         subject: 'Contruction Otp Mail',
+    //     );
+    // }
 
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'email.index',// text: $this->data,
-        );
-    }
+    // public function content(): Content
+    // {
+    //     return new Content(
+    //         view: 'email.index'
+    //     );
+    // }
 
     /**
      * Get the attachments for the message.

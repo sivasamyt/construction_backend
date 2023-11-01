@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OtpTable;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -16,17 +17,24 @@ class UserController extends Controller
         $username = $request->username;
         $email = $request->email;
         $password = $request->password;
+        $otpNumber = $request->otpNumber;
+
         $existUser = User::where("email", $email)->first();
         if (!$existUser) {
-            try {
-                $user = User::create([
-                    'name' => $username,
-                    'email' => $email,
-                    'password' => $password
-                ]);
-                return ['message' => 'success'];
-            } catch (\Throwable $th) {
-                return ['message' => 'failure'];
+            $user = OtpTable::where("mail", $email)->first();
+            if ($user["otp"] != $otpNumber) {
+                try {
+                    $user = User::create([
+                        'name' => $username,
+                        'email' => $email,
+                        'password' => $password
+                    ]);
+                    return ['message' => 'success'];
+                } catch (\Throwable $th) {
+                    return ['message' => 'failure'];
+                }
+            } else {
+                return ['message' => 'OTP Not valid'];
             }
         } else {
             return ['message' => 'Already signed Up Please Login'];
