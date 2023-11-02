@@ -22,7 +22,7 @@ class UserController extends Controller
         $existUser = User::where("email", $email)->first();
         if (!$existUser) {
             $user = OtpTable::where("mail", $email)->first();
-            if ($user["otp"] != $otpNumber) {
+            if (isset($user) && $user["otp"] == $otpNumber) {
                 try {
                     $user = User::create([
                         'name' => $username,
